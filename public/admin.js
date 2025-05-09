@@ -1,11 +1,7 @@
 let loggedIn = false;
-<<<<<<< HEAD
-
-=======
 let productChart;
 
 // Přihlášení
->>>>>>> 1b82b36 (update)
 async function login() {
   const username = document.getElementById('user').value;
   const password = document.getElementById('pass').value;
@@ -21,21 +17,13 @@ async function login() {
     loggedIn = true;
     document.getElementById('adminPanel').style.display = 'block';
     loadOrders();
-<<<<<<< HEAD
-=======
     loadProducts();
     loadProductChart();
->>>>>>> 1b82b36 (update)
   } else {
     alert('Login failed');
   }
 }
 
-<<<<<<< HEAD
-async function addProduct() {
-  const name = document.getElementById('pname').value;
-  const price = parseFloat(document.getElementById('pprice').value);
-=======
 // Přidání produktu
 async function addProduct() {
   const name = document.getElementById('pname').value.trim();
@@ -46,24 +34,15 @@ async function addProduct() {
     alert("Please fill all fields correctly.");
     return;
   }
->>>>>>> 1b82b36 (update)
 
   const res = await fetch('/api/admin/add-product', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-<<<<<<< HEAD
-    body: JSON.stringify({ name, price })
-=======
     body: JSON.stringify({ name, price, count })
->>>>>>> 1b82b36 (update)
   });
 
   const data = await res.json();
   alert(data.success ? 'Product added' : 'Failed to add');
-<<<<<<< HEAD
-}
-
-=======
   if (data.success) {
     loadProducts();
     loadProductChart();
@@ -132,20 +111,11 @@ async function deleteProduct(id) {
 }
 
 // Načtení objednávek
->>>>>>> 1b82b36 (update)
 async function loadOrders() {
   const res = await fetch('/api/admin/orders');
   const orders = await res.json();
   const container = document.getElementById('orders');
   container.innerHTML = '';
-<<<<<<< HEAD
-  orders.forEach(order => {
-    const div = document.createElement('div');
-    div.textContent = `Address: ${order.address} | Items: ${order.items.map(i => i.name).join(', ')}`;
-    container.appendChild(div);
-  });
-}
-=======
 
   orders.forEach(order => {
     const div = document.createElement('div');
@@ -184,4 +154,3 @@ async function loadProductChart() {
     }
   });
 }
->>>>>>> 1b82b36 (update)
