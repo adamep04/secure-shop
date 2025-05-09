@@ -2,11 +2,6 @@ export default async function handler(req, res) {
   try {
     const { address, items } = req.body;
 
-<<<<<<< HEAD
-    const firebaseUrl = process.env.FIREBASE_PROJECT_ID+'/orders.json';
-
-    const response = await fetch(firebaseUrl, {
-=======
     if (!address || !items || !Array.isArray(items) || items.length === 0) {
       return res.status(400).json({ success: false, error: 'Invalid order data' });
     }
@@ -50,7 +45,6 @@ export default async function handler(req, res) {
 
     // Zapsání objednávky
     const orderRes = await fetch(baseUrl + '/orders.json', {
->>>>>>> 1b82b36 (update)
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -60,19 +54,6 @@ export default async function handler(req, res) {
       })
     });
 
-<<<<<<< HEAD
-    if (!response.ok) {
-      throw new Error('Failed to write to Firebase');
-    }
-
-    const result = await response.json();
-    res.status(200).json({ success: true, id: result.name }); // result.name = ID objednávky
-  } catch (err) {
-    console.error('Order error:', err);
-    res.status(500).json({ error: 'Failed to submit order' });
-  }
-}
-=======
     if (!orderRes.ok) {
       throw new Error('Failed to write order to Firebase');
     }
@@ -85,4 +66,3 @@ export default async function handler(req, res) {
     res.status(500).json({ success: false, error: 'Failed to submit order' });
   }
 }
->>>>>>> 1b82b36 (update)
