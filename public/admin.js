@@ -119,7 +119,13 @@ async function loadOrders() {
 
   orders.forEach(order => {
     const div = document.createElement('div');
-    div.textContent = `📦 ${order.address} — ${order.items.map(i => `${i.name} x${i.count}`).join(', ')}`;
+    div.classList.add('card', 'p-2', 'mb-2');
+    
+    div.innerHTML = `
+      <p><strong>${order.address}</strong><br>
+      ${order.items.map(i => `${i.name} x${i.count}`).join(', ')}</p>
+      <button class="btn btn-sm btn-danger" onclick="deleteOrder('${order.id}')">🗑️ Smazat</button>
+    `;
     container.appendChild(div);
   });
 }
