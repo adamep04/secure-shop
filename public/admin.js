@@ -124,7 +124,7 @@ async function loadOrders() {
     div.innerHTML = `
       <p><strong>${order.address}</strong><br>
       ${order.items.map(i => `${i.name} x${i.count}`).join(', ')}</p>
-      <button class="btn btn-sm btn-danger" onclick="deleteOrder('${order.id}')">🗑️ Smazat</button>
+      <button class="btn btn-sm btn-danger" onclick="deleteOrder('${order.id}')">Delete</button>
     `;
     container.appendChild(div);
   });
