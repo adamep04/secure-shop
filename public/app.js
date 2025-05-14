@@ -73,7 +73,7 @@ function updateCart() {
 
   const totalDiv = document.createElement('div');
   totalDiv.className = 'mt-2 fw-bold';
-  totalDiv.innerText = 'Total: $${total.toFixed(2)}';
+  totalDiv.innerText = `Total: $${total.toFixed(2)}`;
   cartDiv.appendChild(totalDiv);
 }
 
