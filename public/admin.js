@@ -15,6 +15,10 @@ async function login() {
   const data = await res.json();
   if (data.success) {
     loggedIn = true;
+    //test autologin
+    const loginTime = Date.now();
+    localStorage.setItem('adminLoginTime', loginTime);
+
     document.getElementById('adminPanel').style.display = 'block';
     loadOrders();
     loadProducts();
@@ -179,3 +183,18 @@ async function deleteOrder(id) {
   }
 }
 
+//zkontroluje jestli je admin prihlasen
+window.addEventListener('DOMContentLoaded', () => {
+  const savedLoginTime = localStorage.getItem('adminLoginTime');
+  const now = Date.now();
+
+  if (savedLoginTime && now - savedLoginTime < 30000) {
+    loggedIn = true;
+    document.getElementById('adminPanel').style.display = 'block';
+    loadOrders();
+    loadProducts();
+    loadProductChart();
+  } else {
+    localStorage.removeItem('adminLoginTime');
+  }
+});
