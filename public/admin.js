@@ -163,7 +163,7 @@ async function loadProductChart() {
 
 //smazani order
 async function deleteOrder(id) {
-  if (!confirm('Opravdu chcete tuto objednávku smazat?')) return;
+  if (!confirm('Are you sure you want to delete this order?')) return;
 
   const res = await fetch('/api/admin/orders', {
     method: 'DELETE',
@@ -172,10 +172,10 @@ async function deleteOrder(id) {
   });
 
   if (res.ok) {
-    alert('Objednávka smazána');
+    alert('Order deleted');
     loadOrders();
   } else {
-    alert('Chyba při mazání');
+    alert('Delete error');
   }
 }
 

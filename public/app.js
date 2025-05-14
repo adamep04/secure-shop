@@ -14,8 +14,8 @@ async function loadProducts() {
       <div class="d-flex justify-content-between align-items-center">
         <div>
           <h5 class="mb-1">${p.name}</h5>
-          <p class="mb-1 text-muted">Skladem: <strong>${p.count}</strong></p>
-          <p class="mb-0">Cena: <strong>$${p.price}</strong></p>
+          <p class="mb-1 text-muted">In stock: <strong>${p.count}</strong></p>
+          <p class="mb-0">Price: <strong>$${p.price}</strong></p>
         </div>
         <div class="text-end">
           <input type="number" min="1" max="${p.count}" value="1" id="qty-${p.id}" class="form-control form-control-sm mb-2" style="width: 70px;">
@@ -32,7 +32,7 @@ function addToCart(product, inputId) {
   const count = parseInt(qtyInput.value);
 
   if (isNaN(count) || count <= 0) {
-    alert('Zadej platné množství.');
+    alert('Enter a valid quantity.');
     return;
   }
 
@@ -52,15 +52,15 @@ function updateCart() {
   cartDiv.innerHTML = '';
 
   if (cart.length === 0) {
-    cartDiv.innerHTML = '<p>Košík je prázdný.</p>';
+    cartDiv.innerHTML = '<p>Cart is empty.</p>';
     return;
   }
 
   cart.forEach((p, index) => {
     const item = document.createElement('div');
     item.innerHTML = `
-      ${p.name} – ks: ${p.count} – celkem: $${(p.count * p.price).toFixed(2)}
-      <button onclick="removeFromCart(${index})" style="margin-left: 10px;">🗑️</button>
+      ${p.name} – ks: ${p.count} – total: $${(p.count * p.price).toFixed(2)}
+      <button onclick="removeFromCart(${index})" style="margin-left: 10px;"> X </button>
     `;
     cartDiv.appendChild(item);
   });
@@ -72,7 +72,7 @@ function removeFromCart(index) {
 }
 function checkout() {
   if (cart.length === 0) {
-    alert('Košík je prázdný.');
+    alert('Cart is empty.');
     return;
   }
   document.getElementById('addressForm').style.display = 'block';
@@ -82,7 +82,7 @@ async function submitOrder() {
   const address = document.getElementById('address').value.trim();
 
   if (!address) {
-    alert('Zadej adresu.');
+    alert('Enter your address.');
     return;
   }
 
@@ -95,14 +95,14 @@ async function submitOrder() {
   const data = await res.json();
 
   if (data.success) {
-    alert('Objednávka byla úspěšně odeslána!');
+    alert('The order has been successfully sent!');
     cart = [];
     updateCart();
     document.getElementById('addressForm').style.display = 'none';
     document.getElementById('address').value = '';
     loadProducts(); // obnov zásoby
   } else {
-    alert('Chyba při odesílání objednávky: ' + (data.error || 'Neznámá chyba'));
+    alert('Error sending order: ' + (data.error || 'Unknown error'));
   }
 }
 
