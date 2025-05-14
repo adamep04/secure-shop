@@ -154,3 +154,40 @@ async function loadProductChart() {
     }
   });
 }
+
+//smazani orders
+async function loadOrders() {
+  const res = await fetch('/api/admin/orders'); // tato route by měla vracet všechna orders
+  const data = await res.json();
+
+  const ordersDiv = document.getElementById('orders');
+  ordersDiv.innerHTML = '';
+
+  Object.entries(data).forEach(([id, order]) => {
+    const div = document.createElement('div');
+    div.innerHTML = `
+      <p><strong>${order.address}</strong> – ${order.date || ''}</p>
+      <button onclick="deleteOrder('${id}')">Smazat</button>
+      <hr/>
+    `;
+    ordersDiv.appendChild(div);
+  });
+}
+
+async function deleteOrder(id) {
+  if (!confirm('Opravdu chcete tuto objednávku smazat?')) return;
+
+  const res = await fetch('/api/admin/orders', {
+    method: 'DELETE',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ id })
+  });
+
+  if (res.ok) {
+    alert('Objednávka smazána');
+    loadOrders();
+  } else {
+    alert('Chyba při mazání');
+  }
+}
+
