@@ -8,11 +8,19 @@ async function loadProducts() {
 
   products.forEach(p => {
     const item = document.createElement('div');
+    item.className = 'card p-3 mb-3';
+
     item.innerHTML = `
-      <div class="mb-2">
-        ${p.name} – skladem: ${p.count} – $${p.price} 
-        <input type="number" min="1" max="${p.count}" value="1" id="qty-${p.id}" style="width: 60px; margin-left:10px;">
-        <button onclick='addToCart(${JSON.stringify(p)}, "qty-${p.id}")'>Add</button>
+      <div class="d-flex justify-content-between align-items-center">
+        <div>
+          <h5 class="mb-1">${p.name}</h5>
+          <p class="mb-1 text-muted">Skladem: <strong>${p.count}</strong></p>
+          <p class="mb-0">Cena: <strong>$${p.price}</strong></p>
+        </div>
+        <div class="text-end">
+          <input type="number" min="1" max="${p.count}" value="1" id="qty-${p.id}" class="form-control form-control-sm mb-2" style="width: 70px;">
+          <button class="btn btn-sm btn-success" onclick='addToCart(${JSON.stringify(p)}, "qty-${p.id}")'>Add</button>
+        </div>
       </div>
     `;
     container.appendChild(item);
