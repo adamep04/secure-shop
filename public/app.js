@@ -63,6 +63,9 @@ function updateCart() {
   let total = 0;
 
   cart.forEach((p, index) => {
+    const subtotal = p.count * p.price;
+    total += subtotal;
+    
     const item = document.createElement('div');
     item.innerHTML = `
       ${p.name} – ks: ${p.count} – total: $${(p.count * p.price).toFixed(2)}
