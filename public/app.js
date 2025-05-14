@@ -18,7 +18,7 @@ async function loadProducts() {
       <div class="d-flex justify-content-between align-items-center">
         <div>
           <h5 class="mb-1">${p.name}</h5>
-          <p class="mb-1 ${stockClass}">${stockText}</p>
+          <p class="mb-1 ${stockClass}">In stock: ${p.count}</p>
           <p class="mb-0">Price: <strong>$${p.price}</strong></p>
         </div>
         <div class="text-end">
