@@ -60,6 +60,8 @@ function updateCart() {
     return;
   }
 
+  let total = 0;
+
   cart.forEach((p, index) => {
     const item = document.createElement('div');
     item.innerHTML = `
@@ -68,6 +70,11 @@ function updateCart() {
     `;
     cartDiv.appendChild(item);
   });
+
+  const totalDiv = document.createElement('div');
+  totalDiv.className = 'mt-2 fw-bold';
+  totalDiv.innerText = 'Total: $${total.toFixed(2)}';
+  cartDiv.appendChild(totalDiv);
 }
 
 function removeFromCart(index) {
