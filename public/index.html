@@ -74,8 +74,8 @@
     function animate() {
       ctx.clearRect(0, 0, width, height);
 
+      //hvezdy
       for (let star of stars) {
-        //pohyb
         star.x += star.vx;
         star.y += star.vy;
 
@@ -89,6 +89,10 @@
         ctx.fill();
       }
 
+      //vypocet trojuhelniku
+      let drawTriangle = false;
+      let nearest = [];
+
       //trojuhelnik mezi 3 nejblizsimi hvezdami ke kurzoru
       if (mouse.x !== null && mouse.y !== null) {
         const distances = stars.map(star => ({
@@ -97,30 +101,31 @@
         }));
 
         distances.sort((a, b) => a.distance - b.distance);
-        const nearest = distances.slice(0, 3).map(obj => obj.star);
+        nearest = distances.slice(0, 3).map(obj => obj.star);
 
         const closestDist = distances[0]?.distance ?? 9999;
-        const maxDist = 150;
-
-        //fade efekt trojuhelniku
-        if (closestDist < maxDist) {
+        drawTriangle = closestDist < 150;
+      }
+      
+        //plynula zmena opacity
+        if (drawTriangle) {
           triangleAlpha += 0.05;
-          if (triangleAlpha > 0.4) triangleAlpha = 0.4;
+          if (triangleAlpha > 1) triangleAlpha = 1;
         } else {
           triangleAlpha -= 0.05;
           if (triangleAlpha < 0) triangleAlpha = 0;
         }
 
-        if (nearest.length === 3 && triangleAlpha > 0) {
+        if (triangleAlpha > 0 && nearest.length === 3) {
           ctx.beginPath();
-          ctx.moveTo(nearest[0].x, nearest[0].y);
-          ctx.lineTo(nearest[1].x, nearest[1].y);
-          ctx.lineTo(nearest[2].x, nearest[2].y);
-          ctx.closePath();
-          ctx.fillStyle = `rgba(255, 255, 255, ${triangleAlpha})`;
-          ctx.fill();
+        ctx.moveTo(nearest[0].x, nearest[0].y);
+        ctx.lineTo(nearest[1].x, nearest[1].y);
+        ctx.lineTo(nearest[2].x, nearest[2].y);
+        ctx.closePath();
+        ctx.strokeStyle = `rgba(255, 255, 255, ${triangleAlpha})`;
+        ctx.lineWidth = 1;
+        ctx.stroke();
         }
-      }
 
       requestAnimationFrame(animate);
     }
