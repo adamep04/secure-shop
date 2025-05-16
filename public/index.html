@@ -59,6 +59,7 @@
     }
 
     let mouse = { x: null, y: null };
+    let triangleAlpha = 0;
 
     window.addEventListener("mousemove", (e) => {
       mouse.x = e.clientX;
@@ -70,25 +71,14 @@
       height = canvas.height = window.innerHeight;
     });
 
-    function drawTriangleBetween(points) {
-      ctx.beginPath();
-      ctx.moveTo(points[0].x, points[0].y);
-      ctx.lineTo(points[1].x, points[1].y);
-      ctx.lineTo(points[2].x, points[2].y);
-      ctx.closePath();
-      ctx.strokeStyle = "rgba(255, 255, 255, 0.2)";
-      ctx.stroke();
-    }
-
-    function draw() {
+    function animate() {
       ctx.clearRect(0, 0, width, height);
 
       for (let star of stars) {
         //pohyb
         star.x += star.vx;
         star.y += star.vy;
-        
-        //odrazeni od okraje
+
         if (star.x < 0 || star.x > width) star.vx *= -1;
         if (star.y < 0 || star.y > height) star.vy *= -1;
 
@@ -99,24 +89,43 @@
         ctx.fill();
       }
 
-      //najdi 3 nejblizsi hvezdy ke kurzoru
+      //trojuhelnik mezi 3 nejblizsimi hvezdami ke kurzoru
       if (mouse.x !== null && mouse.y !== null) {
         const distances = stars.map(star => ({
-          ...star,
+          star,
           distance: Math.hypot(mouse.x - star.x, mouse.y - star.y)
         }));
 
         distances.sort((a, b) => a.distance - b.distance);
-        const nearest = distances.slice(0, 3);
-        if (nearest.length === 3) {
-          drawTriangleBetween(nearest);
+        const nearest = distances.slice(0, 3).map(obj => obj.star);
+
+        const closestDist = distances[0]?.distance ?? 9999;
+        const maxDist = 150;
+
+        //fade efekt trojuhelniku
+        if (closestDist < maxDist) {
+          triangleAlpha += 0.05;
+          if (triangleAlpha > 0.4) triangleAlpha = 0.4;
+        } else {
+          triangleAlpha -= 0.05;
+          if (triangleAlpha < 0) triangleAlpha = 0;
+        }
+
+        if (nearest.length === 3 && triangleAlpha > 0) {
+          ctx.beginPath();
+          ctx.moveTo(nearest[0].x, nearest[0].y);
+          ctx.lineTo(nearest[1].x, nearest[1].y);
+          ctx.lineTo(nearest[2].x, nearest[2].y);
+          ctx.closePath();
+          ctx.fillStyle = `rgba(255, 255, 255, ${triangleAlpha})`;
+          ctx.fill();
         }
       }
 
-      requestAnimationFrame(draw);
+      requestAnimationFrame(animate);
     }
 
-    draw();
+    animate();
   </script>
 
   <script src="app.js"></script>
