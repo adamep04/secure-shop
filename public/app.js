@@ -86,7 +86,7 @@ function updateCart() {
 
 function removeFromCart(index) {
   cart.splice(index, 1); // odstraní danou položku z pole
-  updateCart(); // překreslí košík
+  updateCart(); // aktualizuje košík
 }
 function checkout() {
   if (cart.length === 0) {
@@ -118,7 +118,7 @@ async function submitOrder() {
     updateCart();
     document.getElementById('addressForm').style.display = 'none';
     document.getElementById('address').value = '';
-    loadProducts(); // obnov zásoby
+    loadProducts(); // Obnov zásoby
   } else {
     alert('Error sending order: ' + (data.error || 'Unknown error'));
   }

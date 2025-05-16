@@ -15,7 +15,7 @@ async function login() {
   const data = await res.json();
   if (data.success) {
     loggedIn = true;
-    //test autologin
+    //Autologin
     const loginTime = Date.now();
     localStorage.setItem('adminLoginTime', loginTime);
 
@@ -134,7 +134,7 @@ async function loadOrders() {
   });
 }
 
-// Graf produktů (koláč)
+// Graf produktů na skladě
 async function loadProductChart() {
   const res = await fetch('/api/admin/add-product');
   const data = await res.json();
@@ -165,7 +165,7 @@ async function loadProductChart() {
   });
 }
 
-//smazani order
+//Smazání objednávek
 async function deleteOrder(id) {
   if (!confirm('Are you sure you want to delete this order?')) return;
 
@@ -183,7 +183,7 @@ async function deleteOrder(id) {
   }
 }
 
-//zkontroluje jestli je admin prihlasen
+//Zkontroluje jestli je admin přihlášen
 window.addEventListener('DOMContentLoaded', () => {
   const savedLoginTime = localStorage.getItem('adminLoginTime');
   const now = Date.now();
