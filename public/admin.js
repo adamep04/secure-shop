@@ -18,11 +18,11 @@ async function login() {
     //Autologin
     const loginTime = Date.now();
     localStorage.setItem('adminLoginTime', loginTime);
-
     document.getElementById('adminPanel').style.display = 'block';
     loadOrders();
     loadProducts();
     loadProductChart();
+    startSessionTimer(30); //spusteni odpocitavani
   } else {
     alert('Login failed');
   }
