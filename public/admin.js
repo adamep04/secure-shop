@@ -198,3 +198,23 @@ window.addEventListener('DOMContentLoaded', () => {
     localStorage.removeItem('adminLoginTime');
   }
 });
+
+let sessionCountdownInterval;
+
+function startSessionTimer(seconds) {
+  clearInterval(sessionCountdownInterval); //zastavi predchozi timer
+  const timerEl = document.getElementById('sessionTimer');
+  let remaining = seconds;
+
+  timerEl.textContent = `Session time left: ${remaining}s`;
+
+  sessionCountdownInterval = setInterval(() => {
+    remaining--;
+    if (remaining > 0) {
+      timerEl.textContent = `Session time left: ${remaining}s`;
+    } else {
+      timerEl.textContent = `Session expired.`;
+      clearInterval(sessionCountdownInterval);
+    }
+  }, 1000);
+}
