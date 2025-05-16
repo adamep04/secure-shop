@@ -56,7 +56,7 @@ function updateCart() {
   cartDiv.innerHTML = '';
 
   if (cart.length === 0) {
-    cartDiv.innerHTML = '<p>Cart is empty.</p>';
+    cartDiv.innerHTML = '<p class="text-muted">Cart is empty.</p>';
     return;
   }
 
@@ -67,15 +67,17 @@ function updateCart() {
     total += subtotal;
     
     const item = document.createElement('div');
+    item.className = 'd-flex justify-content-between align-items-center mb-2';
+
     item.innerHTML = `
-      ${p.name} – ks: ${p.count} – total: $${(p.count * p.price).toFixed(2)}
+      <span>${p.name} – ks: ${p.count} – total: $${(p.count * p.price).toFixed(2)}</span>
       <button onclick="removeFromCart(${index})" style="margin-left: 10px;"> X </button>
     `;
     cartDiv.appendChild(item);
   });
 
   const totalDiv = document.createElement('div');
-  totalDiv.className = 'mt-2 fw-bold';
+  totalDiv.className = 'mt-3 fw-bold';
   totalDiv.innerText = `Total: $${total.toFixed(2)}`;
   cartDiv.appendChild(totalDiv);
 }
