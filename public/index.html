@@ -43,14 +43,17 @@
     let width = canvas.width = window.innerWidth;
     let height = canvas.height = window.innerHeight;
 
+    const STAR_COUNT = 120;
     const stars = [];
-    const STAR_COUNT = 100;
+    
 
     for (let i = 0; i < STAR_COUNT; i++) {
       stars.push({
         x: Math.random() * width,
         y: Math.random() * height,
-        radius: Math.random() * 1.5 + 1 
+        radius: Math.random() * 1.5 + 1,
+        vx: (Math.random() - 0.5) * 0.3,
+        vy: (Math.random() - 0.5) * 0.3 
       });
     }
 
@@ -66,31 +69,46 @@
       height = canvas.height = window.innerHeight;
     });
 
+    function drawTriangleBetween(points) {
+      ctx.beginPath();
+      ctx.moveTo(points[0].x, points[0].y);
+      ctx.lineTo(points[1].x, points[1].y);
+      ctx.lineTo(points[2].x, points[2].y);
+      ctx.closePath();
+      ctx.strokeStyle = "rgba(255, 255, 255, 0.2)";
+      ctx.stroke();
+    }
+
     function draw() {
       ctx.clearRect(0, 0, width, height);
 
       for (let star of stars) {
+        //pohyb
+        star.x += star.vx;
+        star.y += star.vy;
+        
+        //odrazeni od okraje
+        if (star.x < 0 || star.x > width) star.vx *= -1;
+        if (star.y < 0 || star.y > height) star.vy *= -1;
+
+        //vykresleni hvezdy
         ctx.beginPath();
         ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
         ctx.fillStyle = "white";
         ctx.fill();
       }
 
-      for (let i = 0; i < stars.length; i++) {
-        for (let j = i + 1; j < stars.length; j++) {
-          const dx = stars[i].x - stars[j].x;
-          const dy = stars[i].y - stars[j].y;
-          const dist = Math.sqrt(dx * dx + dy * dy);
-          const distToMouseI = Math.hypot(mouse.x - stars[i].x, mouse.y - stars[i].y);
-          const distToMouseJ = math.hypot(mouse.x - stars[j].x, mouse.y - stars[j].y);
+      //najdi 3 nejblizsi hvezdy ke kurzoru
+      if (mouse.x !== null && mouse.y !== null) {
+        const distances = stars.map(star => ({
+          ...star,
+          distance: Math.hypot(mouse.x - star.x, mouse.y - star.y)
+        }));
 
-          if (dist < 120 && distToMouseI < 200 && distToMouseJ < 200) {
-            ctx.beginPath();
-            ctx.moveTo(stars[i].x, stars[i].y);
-            ctx.lineTo(stars[j].x, stars[j].y);
-            ctx.strokeStyle = "rgba(255, 255, 255, 0.2)";
-            ctx.stroke();
-          }
+        distances.sort((a, b) => a.distance - b.distance);
+        const nearest = distances.slice(0, 3);
+        if (nearest.length === 3) {
+          drawTriangleBetween(nearest);
         }
       }
 
