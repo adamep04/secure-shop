@@ -59,7 +59,9 @@
     }
 
     let mouse = { x: null, y: null };
-    let triangleAlpha = 0;
+
+    //pole aktivnich trojuhelniku s alpha a zivotnosti
+    const fadingTriangles = [];
 
     window.addEventListener("mousemove", (e) => {
       mouse.x = e.clientX;
@@ -89,10 +91,6 @@
         ctx.fill();
       }
 
-      //vypocet trojuhelniku
-      let drawTriangle = false;
-      let nearest = [];
-
       //trojuhelnik mezi 3 nejblizsimi hvezdami ke kurzoru
       if (mouse.x !== null && mouse.y !== null) {
         const distances = stars.map(star => ({
@@ -101,31 +99,39 @@
         }));
 
         distances.sort((a, b) => a.distance - b.distance);
-        nearest = distances.slice(0, 3).map(obj => obj.star);
+        const nearest = distances.slice(0, 3).map(obj => obj.star);
 
-        const closestDist = distances[0]?.distance ?? 9999;
-        drawTriangle = closestDist < 150;
+        if (nearest.length === 3 && distances[0].distance < 150) {
+          //pridat trojuhelnik to fade fronty
+          fadingTriangles.push({
+            points: nearest.map(p => ({ x: p.x, y: p.y })),
+            alpha: 1,
+            timestamp: Date.now()
+          });
+        }
       }
-      
-        //plynula zmena opacity
-        if (drawTriangle) {
-          triangleAlpha += 0.05;
-          if (triangleAlpha > 1) triangleAlpha = 1;
-        } else {
-          triangleAlpha -= 0.05;
-          if (triangleAlpha < 0) triangleAlpha = 0;
+
+      //kresleni a fade trojuhelniku
+      const now = Date.now();
+      for (let i = fadingTriangles.length - 1; i >= 0; i--) {
+        const tri = fadingTriangles[i];
+        const age = now - tri.timestamp;
+        tri.alpha = 1 - age / 1000;
+
+        if (tri.alpha <= 0) {
+          fadingTriangles.splice(i, 1); //odstraneni trojuhelniku
+          continue;
         }
 
-        if (triangleAlpha > 0 && nearest.length === 3) {
-          ctx.beginPath();
-        ctx.moveTo(nearest[0].x, nearest[0].y);
-        ctx.lineTo(nearest[1].x, nearest[1].y);
-        ctx.lineTo(nearest[2].x, nearest[2].y);
+        ctx.beginPath();
+        ctx.moveTo(tri.points[0].x, tri.points[0].y);
+        ctx.lineTo(tri.points[1].x, tri.points[1].y);
+        ctx.lineTo(tri.points[2].x, tri.points[2].y);
         ctx.closePath();
-        ctx.strokeStyle = `rgba(255, 255, 255, ${triangleAlpha})`;
+        ctx.strokeStyle = `rgba(255, 255, 255, ${tri.alpha.toFixed(2)})`;
         ctx.lineWidth = 1;
         ctx.stroke();
-        }
+      }
 
       requestAnimationFrame(animate);
     }
