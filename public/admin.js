@@ -210,20 +210,34 @@ function startSessionTimer(seconds) {
   const timerEl = document.getElementById('sessionTimer');
   let remaining = seconds;
 
-  timerEl.textContent = `Session time left: ${remaining}s`;
+  updateTimerText(remaining, timerEl);
 
   sessionCountdownInterval = setInterval(() => {
     remaining--;
     if (remaining > 0) {
-      timerEl.textContent = `Session time left: ${remaining}s`;
+      updateTimerText(remaining, timerEl);
     } else {
-      timerEl.textContent = `Session expired.`;
+      timerEl.textContent = 'Session expired.';
+      timerEl.className = 'text-danger fw-bold text-center';
       clearInterval(sessionCountdownInterval);
+      localStorage.removeItem('sessionExpiresAt');
     }
   }, 1000);
 
   if (remaining === 0) {
     localStorage.removeItem('sessionExpiresAt');
+  }
+}
+
+function updateTimerText(remaining, el) {
+  el.textContent = `Session time left: ${remaining}s`;
+
+  if (remaining > 20) {
+    el.className = 'text-success fw-bold text-center';
+  } else if (remaining > 10) {
+    el.className = 'text-warning fw-bold text-center';
+  } else {
+    el.className = 'text-danger fw-bold text-center';
   }
 }
 
