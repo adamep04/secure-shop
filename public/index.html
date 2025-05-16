@@ -116,7 +116,7 @@
       for (let i = fadingTriangles.length - 1; i >= 0; i--) {
         const tri = fadingTriangles[i];
         const age = now - tri.timestamp;
-        tri.alpha = 1 - age / 1000;
+        tri.alpha = 1 - age / 500;
 
         if (tri.alpha <= 0) {
           fadingTriangles.splice(i, 1); //odstraneni trojuhelniku
