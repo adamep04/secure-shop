@@ -67,11 +67,13 @@ function updateCart() {
     total += subtotal;
     
     const item = document.createElement('div');
-    item.className = 'd-flex justify-content-between align-items-center mb-2';
+    item.className = 'mb-2';
 
     item.innerHTML = `
-      <span class="me-2">${p.name} – ks: ${p.count} – total: $${(p.count * p.price).toFixed(2)}</span>
-      <button onclick="removeFromCart(${index})" class="btn btn-sm btn-outline-danger btn-remove"> X </button>
+      <span>
+        ${p.name} – ks: ${p.count} – total: $${(p.count * p.price).toFixed(2)}
+        <button onclick="removeFromCart(${index})" class="btn btn-sm btn-outline-danger btn-remove ms-2"> X </button>
+      </span>
     `;
     cartDiv.appendChild(item);
   });
