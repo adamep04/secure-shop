@@ -71,7 +71,7 @@ function updateCart() {
 
     item.innerHTML = `
       <span>${p.name} – ks: ${p.count} – total: $${(p.count * p.price).toFixed(2)}</span>
-      <button onclick="removeFromCart(${index})" style="margin-left: 10px;"> X </button>
+      <button onclick="removeFromCart(${index})" class="btn btn-sm btn-outline-danger ms-2"> X </button>
     `;
     cartDiv.appendChild(item);
   });
