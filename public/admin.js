@@ -22,7 +22,11 @@ async function login() {
     loadOrders();
     loadProducts();
     loadProductChart();
-    startSessionTimer(30); //spusteni odpocitavani
+    
+    const expiresAt = Date.now() + 30000; //30 sekund
+    localStorage.setItem('sessionExpiresAt', expiresAt);
+    startSessionTimer(Math.floor((expiresAt - Date.now()) / 1000));
+
   } else {
     alert('Login failed');
   }
@@ -217,4 +221,24 @@ function startSessionTimer(seconds) {
       clearInterval(sessionCountdownInterval);
     }
   }, 1000);
+
+  if (remaining === 0) {
+    localStorage.removeItem('sessionExpiresAt');
+  }
 }
+
+window.addEventListener('load', () => {
+  const expiresAt = localStorage.getItem('sessionExpiresAt');
+  if (expiresAt && Date.now() < parseInt(expiresAt)) {
+    loggedIn = true;
+    document.getElementById('adminPanel').style.display = 'block';
+    loadOrders();
+    loadProducts();
+    loadProductChart();
+
+    const secondsLeft = Math.floor((parseInt(expiresAt) - Date.now()) / 1000);
+    startSessionTimer(secondsLeft);
+  } else {
+    localStorage.removeItem('sessionExpiresAt');
+  }
+});
