@@ -53,6 +53,13 @@ body {
   color: red;
   }
 
+  #cart .btn-outline-danger {
+    padding: 2px 8px;
+    font-size: 0.8rem;
+    border-radius: 4px;
+    line-height: 1;
+  }
+
   input[type="number"] {
   width: 70px;
   }
